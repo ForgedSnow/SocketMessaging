@@ -41,7 +41,7 @@ class ConnectedUser:
                 self.server.propagate_message(self.id, data.get("message"))
 
     def send_message(self, message):
-        send_data = json.dumps({"type": 0,
+        send_data = json.dumps({"type": "server_message",
                                 "sender": message.sender,
                                 "message": message.message,
                                 "time": message.time})
@@ -49,18 +49,6 @@ class ConnectedUser:
             self.host.send(send_data.encode())
         except Exception:
             print("Message did not send to User %s" % self.id)
-
-    def connection(self):
-        # send user they joined chat message
-        time = datetime.datetime.utcnow()
-        send_data = json.dumps({"type": 0,
-                                "sender": "Server",
-                                "message": "User " + str(self.id) + " has successfully joined the channel",
-                                "time": [time.hour, time.minute, time.second, time.microsecond]})
-        try:
-            self.host.send(send_data.encode())
-        except Exception:
-            print("Client error. Disconnecting")
 
 
 def create_socket():
